@@ -5,117 +5,173 @@
     ViewBag.Title = "Production Title Uploads";
 }
 
-@using(Html.BeginForm("PodTitleUpload",
+@using (Html.BeginForm("PodTitleUpload",
                         "Imports",
                         FormMethod.Post,
-                        new { enctype="multipart/form-data" }))
+                        new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <div class="panel">
-        <div class="panel panel-heading">
+    <div class="panel panel-default">
+        <div class="panel-body">
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <h3>Production Title Consumer</h3>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Publisher Mapping</h5>
-                </div>            
-                <div class="col-md-4">
-                    <h5>File To Consume</h5>
-                </div>
-                <div class="col-md-4">
-                    <h5>Format</h5>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <select name="MappingName" class="form-control input-sm">
-                        <option value=""></option>
-                        @foreach(var item in Model.Mappings)
-                        {
-                            <option value="@item">@item</option>
-                        }
+                    <div class="form-group">
+                        <label>Publisher Mapping</label>
+                        <select name="MappingName" class="form-control ">
+                            <option value=""></option>
+                            @foreach (var item in Model.Mappings)
+                            {
+                                <option value="@item">@item</option>
+                            }
 
-                    </select>
+                        </select>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <input type="file" name="FileIn" />
+                    <div class="form-group">
+                        <label>File to Consume</label>
+                        <div class="input-group">
+
+                            <span class="input-group-btn">
+                                <span class="btn btn-primary btn-file">
+                                    Browse... <input type="file" name="FileIn" id="fileIn" />
+                                </span>
+                            </span>
+                            <input type="text" class="form-control" readonly>
+                        </div>
+
+                        <script>
+                            $(document).ready(function () {
+
+                                $(document).on('change', '.btn-file :file', function () {
+                                    var input = $(this),
+                                        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                                        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                                    input.trigger('fileselect', [numFiles, label]);
+                                });
+
+                                $(document).ready(function () {
+                                    $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+
+                                        var input = $(this).parents('.input-group').find(':text'),
+                                            log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                                        if (input.length) {
+                                            input.val(log);
+                                        } else {
+                                            if (log) alert(log);
+                                        }
+
+                                    });
+                                });
+                            });
+                        </script>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <select name="Source" class="form-control input-sm">
-                        <option value=""></option>
-                        <option value="1">Excel xlsx File</option>
-                        <option value="2">Excel xls File</option>                        
-                        <option value="3">XML File</option>
-                    </select>
+                    <div class="form-group">
+                        <label>Format</label>
+                        <select name="Source" class="form-control ">
+                            <option value=""></option>
+                            <option value="1">Excel xlsx File</option>
+                            <option value="2">Excel xls File</option>
+                            <option value="3">XML File</option>
+                        </select>
+                    </div>
                 </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="ddlContractSelect">ContractID by:</label>
+                        <select name="ddlContractSelect" class="form-control" onchange="setContract($(this).val());">
+                            <option value="1">By File</option>
+                            <option value="0">By Entry</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4" style="display: none;">
+                    <div class="form-group">
+                        <label for="txtContractID">ContractID by:</label>
+                        <input type="text" id="txtContractID" class="form-control" name="txtContractID" />
+                        <script type="text/javascript">
+                            function toggleContract(x) {
+                                $('#txtContractID').parent().parent().css("display", x);
+                            }
+
+                            function setContract(optval) {
+                                if (optval == "0") {
+                                    toggleContract("block");
+                                } else {
+                                    $('#txtContractID').val(null);
+                                    toggleContract("none");
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="">&nbsp;</label>
+                        <input type="submit" value="Process File" class="btn btn-primary btn-block" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th><strong>ISBN:</strong></th>
+                                <th><strong>Title:</strong></th>
+                                <th><strong>ContractID</strong></th>
+                                <th><strong>Number of Pages</strong></th>
+                                <th><strong>Trim Size</strong></th>
+                                <th><strong>Paper Stock</strong></th>
+                                <th><strong>Paper Weight</strong></th>
+                                <th><strong>Format</strong></th>
+                                <th><strong>Print Type</strong></th>
+                                <th><strong>Format Size</strong></th>
+                                <th><strong>Cloth Color</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Entries)
+                            {
+                                <tr>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][Isbn]" value="@item.Isbn" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][Title]" value="@item.Title" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][ContractID]" value="@item.ContractID" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][NumberOfPages]" value="@item.NumberOfPages" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][TrimSize]" value="@item.TrimSize" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][PaperStock]" value="@item.PaperStock" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][PaperWeight]" value="@item.PaperWeight" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][Format]" value="@item.Format" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][PrintType]" value="@item.PrintType" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][FormatSize]" value="@item.FormatSize" class="form-control input-sm" /></td>
+                                    <td><input type="text" name="lineitems[@item.LineNumber][ClothColor]" value="@item.ClothColor" class="form-control input-sm" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+
             </div>
         </div>
     </div>
-   <input type="submit" value="Process File" class="btn btn-default"/>
-    <br />
-    <div class="row ">
-        <div class="col-md-3">
-                    <label for="ddlContractSelect">ContractID by:</label>
-                    <select name="ddlContractSelect" onchange="setContract($(this).val());">
-                        <option value="1">By File</option>
-                        <option value="0">By Entry</option>
-                    </select>
-       </div>
-       <div class="col-md-3">
-           <input type="text" id="txtContractID" name="txtContractID" style="display: none;" />
-        <script type="text/javascript">
-            function toggleContract(x) {
-
-                $('#txtContractID').css("display",x);
-            }
-
-            function setContract(optval) {
-                if (optval == "0") { toggleContract("block"); } else { $('#txtContractID').val(null); toggleContract("none");}
-            }
-        </script>
-       </div>
-   </div>
-    <br />
-   <div id="output">
-       <table class="table table-bordered">
-           <thead>
-               <tr>
-               <th><strong>ISBN:</strong></th>
-               <th><strong>Title:</strong></th>
-               <th><strong>ContractID</strong></th>
-               <th><strong>Number of Pages</strong></th>
-               <th><strong>Trim Size</strong></th>
-               <th><strong>Paper Stock</strong></th>
-               <th><strong>Paper Weight</strong></th>
-               <th><strong>Format</strong></th>
-               <th><strong>Print Type</strong></th>
-               <th><strong>Format Size</strong></th>
-               <th><strong>Cloth Color</strong></th>
-            </tr>
-           </thead>
-           <tbody>
-               @foreach (var item in Model.Entries)
-               {
-                   <tr>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['Isbn']" value="@item.Isbn" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['Title']" value="@item.Title" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['ContractID']" value="@item.ContractID" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['NumberOfPages']" value="@item.NumberOfPages" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['TrimSize']" value="@item.TrimSize" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['PaperStock']" value="@item.PaperStock" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['PaperWeight']" value="@item.PaperWeight" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['Format']" value="@item.Format" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['PrintType']" value="@item.PrintType" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['FormatSize']" value="@item.FormatSize" class="form-control input-sm" /></td>
-                       <td><input type="text" name="lineitems[@item.LineNumber]['ClothColor']" value="@item.ClothColor" class="form-control input-sm" /></td>
-                   </tr>                   
-               }               
-           </tbody>
-       </table>
-   </div>
-        
 }
 

@@ -7,6 +7,9 @@
     <link href="/cdn/css/bootstrap/_bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="/cdn/css/dashboard/_dashboard.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+
+    <script src="/cdn/js/jquery-2.1.1.min.js"></script>
+    <script src="/cdn/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,9 +24,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Imports","Index","Imports")</li>
-                    <li>@Html.ActionLink("Exports","Index","Exports")</li>
-                    <li>@Html.ActionLink("Reports","Index","Reports")</li>
+                    <li>@Html.ActionLink("Imports", "Index", "Imports")</li>
+                    <li>@Html.ActionLink("Exports", "Index", "Exports")</li>
+                    <li>@Html.ActionLink("Reports", "Index", "Reports")</li>
                 </ul>
             </div>
         </div>
@@ -31,13 +34,14 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Item Master Tools</p>
-        </footer>
+
     </div>
 
-    <script src="/cdn/js/jquery-2.1.1.min.js"></script>
-    <script src="/cdn/js/bootstrap.min.js"></script>
+    <footer class="container">
+        <div class="row">
+            <div class="col-md-12">&copy; @DateTime.Now.Year - ItemMaster Manager System </div>
+        </div>
+    </footer>
+
 </body>
 </html>
