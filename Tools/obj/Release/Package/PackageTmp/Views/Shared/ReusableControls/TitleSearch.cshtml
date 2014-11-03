@@ -1,0 +1,85 @@
+﻿@model Tools.Models.TitleSearch
+@{
+    ViewBag.Title = "TitleSearch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <h1>TitleSearch</h1>
+    </div>    
+</div>
+@Html.ActionLink("Reset Form","TitleSearch","Imports",null,new { @class="btn btn-sm" })
+@Html.ActionLink("New Title","TitleDetails", "Imports", null, new { @class = "btn btn-sm" })
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-md-4">
+        @Html.LabelFor(x => x.Isbn13)
+        @Html.TextBoxFor(x => x.Isbn13)
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(x=>x.ProductCode)
+        @Html.TextBoxFor(x=>x.ProductCode)
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(x=>x.Title)
+        @Html.TextBoxFor(x=>x.Title)
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(x=>x.Subtitle)
+        @Html.TextBoxFor(x=>x.Subtitle)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        @Html.LabelFor(x=>x.Isbn10)
+        @Html.TextBoxFor(x=>x.Isbn10)
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(x=>x.Imprint)
+        @Html.TextBoxFor(x=>x.Imprint)
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(x=>x.Ctime)
+        @Html.TextBoxFor(x=>x.Ctime)
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(x=>x.Atime)
+        @Html.TextBoxFor(x=>x.Atime)
+    </div>
+</div>
+    <input type="submit" value="Search" class="btn btn-primary" />
+<div class="row">
+    <table class="table table-striped">
+        <tr>
+            <th width="5%">Select</th>
+            <th width="10%">@Html.LabelFor(x=>x.Isbn13)</th>
+            <th width="10%">@Html.LabelFor(x=>x.Isbn10)</th>
+            <th width="10%">@Html.LabelFor(x=>x.ProductCode)</th>
+            <th width="6%">@Html.LabelFor(x=>x.ProductTypeName)</th>
+            <th width="20%">@Html.LabelFor(x=>x.Title)</th>
+            <th width="15%">@Html.LabelFor(x=>x.Subtitle)</th>
+            <th width="10%">@Html.LabelFor(x=>x.Imprint)</th>
+            <th width="7%">@Html.LabelFor(x=>x.Ctime)</th>
+            <th width="7%">@Html.LabelFor(x=>x.Atime)</th>         
+        </tr>
+         @foreach(var lineitem in Model.Results)
+         {
+             <tr>
+                 <td>@Html.ActionLink("Select","TitleDetails","Imports",new { id = lineitem.ProductID },new { @class = "btn btn-sm" })</td>
+                 <td>@lineitem.ISBN13</td>
+                 <td>@lineitem.ISBN10</td>
+                 <td>@lineitem.ProductCode</td>
+                 <td>@lineitem.ProductTypeName</td>
+                 <td>@lineitem.Title</td>                 
+                 <td>@lineitem.Subtitle</td>
+                 <td>@lineitem.Imprint</td>
+                 <td>@lineitem.CreatedOn</td>
+                 <td>@lineitem.LastModified</td>
+             </tr>
+         }
+    </table>
+</div>
+
+}

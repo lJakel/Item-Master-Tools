@@ -1,0 +1,121 @@
+﻿@model Tools.ProductionConsumer
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Production Title Uploads";
+}
+
+@using(Html.BeginForm("PodTitleUpload",
+                        "Imports",
+                        FormMethod.Post,
+                        new { enctype="multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel">
+        <div class="panel panel-heading">
+            <div class="row">
+                <div class="col-md-10">
+                    <h3>Production Title Consumer</h3>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Publisher Mapping</h5>
+                </div>            
+                <div class="col-md-4">
+                    <h5>File To Consume</h5>
+                </div>
+                <div class="col-md-4">
+                    <h5>Format</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <select name="MappingName" class="form-control input-sm">
+                        <option value=""></option>
+                        @foreach(var item in Model.Mappings)
+                        {
+                            <option value="@item">@item</option>
+                        }
+
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="file" name="FileIn" />
+                </div>
+                <div class="col-md-4">
+                    <select name="Source" class="form-control input-sm">
+                        <option value=""></option>
+                        <option value="1">Excel xlsx File</option>
+                        <option value="2">Excel xls File</option>                        
+                        <option value="3">XML File</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+   <input type="submit" value="Process File" class="btn btn-default"/>
+    <br />
+    <div class="row ">
+        <div class="col-md-3">
+                    <label for="ddlContractSelect">ContractID by:</label>
+                    <select name="ddlContractSelect" onchange="setContract($(this).val());">
+                        <option value="1">By File</option>
+                        <option value="0">By Entry</option>
+                    </select>
+       </div>
+       <div class="col-md-3">
+           <input type="text" id="txtContractID" name="txtContractID" style="display: none;" />
+        <script type="text/javascript">
+            function toggleContract(x) {
+
+                $('#txtContractID').css("display",x);
+            }
+
+            function setContract(optval) {
+                if (optval == "0") { toggleContract("block"); } else { $('#txtContractID').val(null); toggleContract("none");}
+            }
+        </script>
+       </div>
+   </div>
+    <br />
+   <div id="output">
+       <table class="table table-bordered">
+           <thead>
+               <tr>
+               <th><strong>ISBN:</strong></th>
+               <th><strong>Title:</strong></th>
+               <th><strong>ContractID</strong></th>
+               <th><strong>Number of Pages</strong></th>
+               <th><strong>Trim Size</strong></th>
+               <th><strong>Paper Stock</strong></th>
+               <th><strong>Paper Weight</strong></th>
+               <th><strong>Format</strong></th>
+               <th><strong>Print Type</strong></th>
+               <th><strong>Format Size</strong></th>
+               <th><strong>Cloth Color</strong></th>
+            </tr>
+           </thead>
+           <tbody>
+               @foreach (var item in Model.Entries)
+               {
+                   <tr>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['Isbn']" value="@item.Isbn" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['Title']" value="@item.Title" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['ContractID']" value="@item.ContractID" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['NumberOfPages']" value="@item.NumberOfPages" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['TrimSize']" value="@item.TrimSize" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['PaperStock']" value="@item.PaperStock" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['PaperWeight']" value="@item.PaperWeight" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['Format']" value="@item.Format" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['PrintType']" value="@item.PrintType" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['FormatSize']" value="@item.FormatSize" class="form-control input-sm" /></td>
+                       <td><input type="text" name="lineitems[@item.LineNumber]['ClothColor']" value="@item.ClothColor" class="form-control input-sm" /></td>
+                   </tr>                   
+               }               
+           </tbody>
+       </table>
+   </div>
+        
+}
+

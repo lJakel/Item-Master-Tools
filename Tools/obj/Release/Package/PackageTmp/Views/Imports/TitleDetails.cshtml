@@ -1,0 +1,48 @@
+﻿@model ModelService.ItemMaster.Models.Product
+@{
+    ViewBag.Title = "TitleDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Title Details</h1>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(x => x.ISBN13)
+            @Html.TextBoxFor(x => x.ISBN13,new { @class="form-control input-sm" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(x=>x.ProductCode)
+            @Html.TextBoxFor(x => x.ProductCode,new { @class = "form-control input-sm" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(x=>x.ISBN10)
+            @Html.TextBoxFor(x=>x.ISBN10, new { @class = "form-control input-sm" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10">
+            @Html.LabelFor(x =>x.Title)
+            @Html.TextBoxFor(x =>x.Title, new { @class = "form-control input-sm" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            @Html.LabelFor(x =>x.Subtitle)
+            @Html.TextBoxFor(x =>x.Subtitle, new { @class = "form-control input-sm" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(x =>x.ShortTitle)
+            @Html.TextBoxFor(x =>x.ShortTitle, new { @class = "form-control input-sm" })
+        </div>        
+    </div>
+    
+
+    
+}
+
+
+

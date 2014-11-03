@@ -1,0 +1,173 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Production File Mapping";
+}
+@model ProductionUpload
+<div class="panel panel-group">
+    <div class="panel panel-heading">
+        <h5>@Model.ErrorMsg</h5>
+        <h2>Production Mapping Tool</h2>
+    </div>
+    <div class="row">
+    @using (Html.BeginForm("ProductionMapping",
+                            "Imports",
+                            FormMethod.Post,
+                            new { enctype = "multipart/form-data" }))
+    {
+      
+    @Html.AntiForgeryToken()
+    <h5 class="form-group">Choose File to Import</h5>
+    <input type="file" name="FileIn" id="fileIn" title="Select a file to upload here" />
+        <select name="Source" class="form-control">            
+            <option value="1">Excel xlsx File</option>
+            <option value="2">Excel xls File</option>
+            <option value="3">XML File</option>
+        </select>
+        <input type="submit" class="btn btn-default" />
+    }
+        </div>
+    <h4>Map inbound columns to Production Layout</h4><br />
+    @using (Html.BeginForm("SubmitProductionCodex", "Imports", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        string currentPage = Model.MappingHeaders.Keys.FirstOrDefault();
+        List<string> headers = new List<string>();
+        headers.Add(" ");
+        if (!String.IsNullOrWhiteSpace(currentPage))
+        {
+            headers = Model.MappingHeaders[currentPage].ToList();
+        }
+
+        @Html.AntiForgeryToken();
+        <div class="row">
+            <div class="col-lg-12" style="text-align:left">
+                <label>For File: @Model.MappingHeaders.Keys.FirstOrDefault()</label>
+                <input type="text" name="Source" readonly="readonly" value="@Model.Source" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <ol>
+                <li><strong>ISBN:</strong></li>
+                <li><strong>Title:</strong></li>
+                <li><strong>ContractID</strong></li>
+                <li><strong>Number of Pages</strong></li>
+                <li><strong>Trim Size</strong></li>
+                <li><strong>Paper Stock</strong></li>
+                <li><strong>Paper Weight</strong></li>
+                <li><strong>Format</strong></li>
+                <li><strong>Print Type</strong></li>
+                <li><strong>Format Size</strong></li>
+                <li><strong>Cloth Color</strong></li>
+                </ol>     
+            </div>
+            <div class="col-md-5">
+                <ol>
+                    <li>
+                        <select name="ddlIsbn">
+
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlTitle">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlContractID">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlNumberOfPages">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlTrimSize">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlPaperStock">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlPaperWeight">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlFormat">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlPrintType">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlFormatSize">
+                            @foreach (string item in headers)
+                            {
+                                <option value="@headers.IndexOf(item)">@item</option>
+                            }
+                        </select>
+                    </li>
+                    <li>
+                        <select name="ddlClothColor">
+                                @foreach (string item in headers)
+                                {
+                                    <option value="@headers.IndexOf(item)">@item</option>
+                                }
+                        </select>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 form-group">
+              <label for="SettingsName">Settings Name</label>
+              <input type="text" name="SettingsName" class="form-control" value="@Model.SettingsName"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <input type="submit" id="submitMap" value="Save Setting" class="btn btn-primary" />
+            </div>
+        </div>
+      }
+
+@Model.ResultsData
+

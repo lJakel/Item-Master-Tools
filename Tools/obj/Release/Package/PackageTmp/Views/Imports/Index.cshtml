@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Imports";
+}
+
+@* Imports Landing Page *@
+
+<h2>Welcome to the Imports Section, please select from one of the tools below:</h2>
+<ul>
+    <li>@Html.ActionLink("Production File Mapping","ProductionMapping","Imports")</li>
+    <li>@Html.ActionLink("Production File Consumption","PodConsumer","Imports")</li>
+    <li>@Html.ActionLink("Title Search","TitleSearch","Imports")</li>
+</ul>
+
